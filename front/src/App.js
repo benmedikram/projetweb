@@ -1,5 +1,5 @@
 import React from "react";
-import { Routes, Route } from "react-router-dom";
+import { Routes, Route, useLocation } from "react-router-dom";
 import Sidebar from "./components/Sidebar";
 import Dashboard from "./pages/Dashboard";
 import Tasks from "./pages/Tasks";
@@ -9,12 +9,17 @@ import "./App.css";
 import SignIn from "./pages/SignIn.jsx";
 
 const App = () => {
+  const location = useLocation(); // Get current route
+
+  // Check if current route is SignIn
+  const isSignInPage = location.pathname === "/";
+
   return (
     <div className="app-container">
-      <Sidebar />
+      {!isSignInPage && <Sidebar />} {/* Only show sidebar if not SignIn */}
       <div className="main-content">
         <Routes>
-          <Route path="/" element={<SignIn />} />
+          <Route path="/" element={<SignIn/>} />
           <Route path="/dashbord" element={<Dashboard />} />
           <Route path="/tasks" element={<Tasks />} />
           <Route path="/courses" element={<Courses />} />
@@ -26,4 +31,5 @@ const App = () => {
 };
 
 export default App;
+
 

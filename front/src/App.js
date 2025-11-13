@@ -1,27 +1,29 @@
-import { Routes, Route, Navigate } from "react-router-dom";
+import React from "react";
+import { Routes, Route } from "react-router-dom";
+import Sidebar from "./components/Sidebar";
+import Dashboard from "./pages/Dashboard";
+import Tasks from "./pages/Tasks";
+import Courses from "./pages/Courses";
+import Projects from "./pages/Projects";
+import "./App.css";
 import SignIn from "./pages/SignIn.jsx";
-import SignUp from "./pages/SignUp.jsx";
-import Dashboard from "./pages/Dashboard.jsx";
-import ProtectedRoute from "./routes/ProtectedRoute.jsx";
 
-export default function App() {
+const App = () => {
   return (
-    <Routes>
-      <Route path="/" element={<Navigate to="/signin" replace />} />
-
-      <Route path="/signin" element={<SignIn />} />
-      <Route path="/signup" element={<SignUp />} />
-
-      <Route
-        path="/dashboard"
-        element={
-          <ProtectedRoute>
-            <Dashboard />
-          </ProtectedRoute>
-        }
-      />
-
-      <Route path="*" element={<div style={{ padding: 24 }}>Not found</div>} />
-    </Routes>
+    <div className="app-container">
+      <Sidebar />
+      <div className="main-content">
+        <Routes>
+          <Route path="/" element={<SignIn />} />
+          <Route path="/dashbord" element={<Dashboard />} />
+          <Route path="/tasks" element={<Tasks />} />
+          <Route path="/courses" element={<Courses />} />
+          <Route path="/projects" element={<Projects />} />
+        </Routes>
+      </div>
+    </div>
   );
-}
+};
+
+export default App;
+

@@ -1,0 +1,35 @@
+.sidebar {
+    width: 220px;
+    background-color: #1976d2; /* Blue sidebar */
+    color: white;
+    display: flex;
+    flex-direction: column;
+    padding: 20px;
+    min-height: 100vh;
+    box-shadow: 2px 0 8px rgba(0,0,0,0.1);
+}
+
+.sidebar h2 {
+    margin-bottom: 40px;
+    font-size: 24px;
+    text-align: center;
+}
+
+.sidebar nav a {
+    color: white;
+    text-decoration: none;
+    display: block;
+    margin-bottom: 15px;
+    padding: 12px 15px;
+    border-radius: 8px;
+    font-weight: 500;
+    transition: background-color 0.2s;
+}
+
+.sidebar nav a:hover {
+    background-color: #1565c0; /* Darker on hover */
+}
+
+.sidebar nav a.active {
+    background-color: #0d47a1; /* Highlight active page */
+}

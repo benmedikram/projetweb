@@ -1,20 +1,8 @@
-import { useNavigate } from "react-router-dom";
+import React from "react";
 
-export default function Dashboard() {
-  const navigate = useNavigate();
-  const user = JSON.parse(localStorage.getItem("user") || "{}");
+const Dashboard = () => {
+  return <h2>Welcome to your Dashboard!</h2>;
+};
 
-  const logout = () => {
-    localStorage.removeItem("token");
-    localStorage.removeItem("user");
-    navigate("/signin");
-  };
+export default Dashboard;
 
-  return (
-    <div style={{ padding: 24 }}>
-      <h2>Welcome {user.name || user.email || "👋"}</h2>
-      <p>This is a protected page.</p>
-      <button onClick={logout}>Log out</button>
-    </div>
-  );
-}

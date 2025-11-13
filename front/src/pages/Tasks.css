@@ -1,0 +1,76 @@
+.tasks-container h2 {
+    margin-bottom: 20px;
+}
+
+.task-card {
+    background-color: white;
+    padding: 20px;
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+}
+
+.task-input {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 20px;
+}
+
+.task-input input {
+    flex: 1;
+    padding: 10px;
+    border-radius: 8px;
+    border: 1px solid #ccc;
+}
+
+.task-input button {
+    padding: 10px 15px;
+    border: none;
+    border-radius: 8px;
+    background-color: #1976d2;
+    color: white;
+    cursor: pointer;
+}
+
+.task-input button:hover {
+    background-color: #1565c0;
+}
+
+.task-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.task-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px;
+    border-bottom: 1px solid #eee;
+}
+
+.task-item div button {
+    margin-left: 5px;
+    padding: 5px 10px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.task-item div button:first-child {
+    background-color: #ff9800;
+    color: white;
+}
+
+.task-item div button:first-child:hover {
+    background-color: #e68a00;
+}
+
+.task-item div button:last-child {
+    background-color: #f44336;
+    color: white;
+}
+
+.task-item div button:last-child:hover {
+    background-color: #d32f2f;
+}

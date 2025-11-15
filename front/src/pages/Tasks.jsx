@@ -40,7 +40,7 @@ export default function Tasks() {
     return (
         <div className="tasks-container">
         <h1>My Tasks</h1>
-        <p>Organise tes devoirs et projets ✨</p>
+        <p>Organise tes devoirs et projets! ✨</p>
 
         {/* Formulaire ajout */}
         <div className="add-task-box">

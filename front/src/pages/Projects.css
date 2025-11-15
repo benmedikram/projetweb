@@ -1,0 +1,62 @@
+.projects-container {
+  padding: 20px;
+  font-family: Arial, sans-serif;
+}
+
+.add-project {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 20px;
+}
+
+.add-project input,
+.add-project select {
+  padding: 5px;
+  border-radius: 5px;
+  border: 1px solid #ccc;
+}
+
+.add-project button {
+  padding: 6px 12px;
+  border: none;
+  border-radius: 5px;
+  background-color: #007bff;
+  color: white;
+  cursor: pointer;
+}
+
+.projects-list {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.project-card {
+  padding: 15px;
+  border: 1px solid #ddd;
+  border-radius: 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.project-card h3 {
+  margin: 0;
+}
+
+.project-card p {
+  margin: 0;
+}
+
+.status {
+  padding: 3px 8px;
+  color: white;
+  border-radius: 5px;
+  width: fit-content;
+}
+
+.project-actions {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+}

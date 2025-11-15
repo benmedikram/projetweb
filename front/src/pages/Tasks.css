@@ -1,76 +1,102 @@
-.tasks-container h2 {
-    margin-bottom: 20px;
-}
-
-.task-card {
-    background-color: white;
+.tasks-container {
     padding: 20px;
-    border-radius: 12px;
-    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
 }
 
-.task-input {
+h1 {
+    font-size: 28px;
+    font-weight: bold;
+}
+
+.add-task-box {
     display: flex;
     gap: 10px;
-    margin-bottom: 20px;
+    margin: 20px 0;
 }
 
-.task-input input {
-    flex: 1;
+.add-task-box input {
     padding: 10px;
     border-radius: 8px;
     border: 1px solid #ccc;
 }
 
-.task-input button {
-    padding: 10px 15px;
-    border: none;
-    border-radius: 8px;
-    background-color: #1976d2;
+.btn-add {
+    background-color: #0652DD;
     color: white;
+    padding: 10px 16px;
+    border-radius: 8px;
+    border: none;
     cursor: pointer;
+    font-weight: bold;
 }
 
-.task-input button:hover {
-    background-color: #1565c0;
+.btn-add:hover {
+    background-color: #1B9CFC;
 }
 
-.task-list {
-    list-style: none;
-    padding: 0;
-    margin: 0;
+/* TABLE */
+.task-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+    background: white;
+    border-radius: 12px;
+    overflow: hidden;
 }
 
-.task-item {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 10px;
+.task-table th,
+.task-table td {
+    padding: 15px;
     border-bottom: 1px solid #eee;
 }
 
-.task-item div button {
-    margin-left: 5px;
-    padding: 5px 10px;
+.task-table th {
+    background-color: #f2f2f2;
+    text-align: left;
+}
+
+.empty {
+    text-align: center;
+    padding: 20px;
+}
+
+/* SELECT STATUT */
+.status-select {
+    padding: 6px 10px;
+    border-radius: 8px;
     border: none;
-    border-radius: 5px;
+    font-weight: 600;
     cursor: pointer;
 }
 
-.task-item div button:first-child {
-    background-color: #ff9800;
+/* Rouge : À faire */
+.status-select.À.faire {
+    background-color: #e63946;
     color: white;
 }
 
-.task-item div button:first-child:hover {
-    background-color: #e68a00;
+/* Jaune : En cours */
+.status-select.En.cours {
+    background-color: #f1c40f;
+    color: black;
 }
 
-.task-item div button:last-child {
-    background-color: #f44336;
+/* Vert : Terminé */
+.status-select.Terminé {
+    background-color: #2ecc71;
     color: white;
 }
 
-.task-item div button:last-child:hover {
-    background-color: #d32f2f;
+/* Bouton supprimer */
+.delete-btn {
+    background-color: #c0392b;
+    color: white;
+    padding: 6px 12px;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    font-weight: bold;
+}
+
+.delete-btn:hover {
+    background-color: #e74c3c;
 }

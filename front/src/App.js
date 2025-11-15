@@ -6,6 +6,7 @@ import Tasks from "./pages/Tasks";
 import Courses from "./pages/Courses";
 import Projects from "./pages/Projects";
 import "./App.css";
+import Logout from "./pages/Logout.jsx";
 import SignIn from "./pages/SignIn.jsx";
 
 const App = () => {
@@ -19,7 +20,8 @@ const App = () => {
       {!isSignInPage && <Sidebar />} {/* Only show sidebar if not SignIn */}
       <div className="main-content">
         <Routes>
-          <Route path="/" element={<SignIn/>} />
+          <Route path="/" element={<SignIn />} />
+          <Route path="/logOut" element={<Logout/>} />
           <Route path="/dashbord" element={<Dashboard />} />
           <Route path="/tasks" element={<Tasks />} />
           <Route path="/courses" element={<Courses />} />

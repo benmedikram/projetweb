@@ -6,8 +6,8 @@ export default function AuthLayout({ title, subtitle, children }) {
         {/* Bandeau visuel */}
         <aside className="auth-hero">
           <div className="auth-hero-content">
-            <h1>Welcome 👋</h1>
-            <p>Build your project faster with a clean auth flow.</p>
+            <h1>Welcome !</h1>
+            <p>EduSpace – Your Path to Academic Success.</p>
           </div>
         </aside>
 

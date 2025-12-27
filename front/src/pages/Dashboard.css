@@ -1,0 +1,254 @@
+/* ================================
+   THEME GLOBAL (PARTAGÉ AVEC AUTH)
+================================ */
+:root {
+  --primary: #0EA5A4;
+  --primary-dark: #0C8F8E;
+  --primary-soft: #E6F7F7;
+
+  --bg-app: #F8FAFC;
+  --bg-card: #FFFFFF;
+
+  --border: #E5E7EB;
+
+  --text-main: #0F172A;
+  --text-muted: #64748B;
+}
+
+/* ================================
+   RESET & BASE
+================================ */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: "Segoe UI", sans-serif;
+}
+
+.dashboard-container {
+  display: flex;
+  min-height: 100vh;
+  background: var(--bg-app);
+  color: var(--text-main);
+}
+
+/* ================================
+   SIDEBAR
+================================ */
+.sidebar {
+  width: 240px;
+  background: linear-gradient(
+    180deg,
+    var(--primary),
+    var(--primary-dark)
+  );
+  color: white;
+  padding: 28px 22px;
+  display: flex;
+  flex-direction: column;
+}
+
+.logo {
+  font-size: 28px;
+  font-weight: 700;
+  margin-bottom: 45px;
+}
+
+.menu {
+  list-style: none;
+}
+
+.menu li {
+  padding: 14px 18px;
+  border-radius: 12px;
+  margin-bottom: 12px;
+  cursor: pointer;
+  font-weight: 500;
+  transition: background 0.2s ease;
+}
+
+.menu li.active,
+.menu li:hover {
+  background: rgba(255, 255, 255, 0.25);
+}
+
+/* ================================
+   MAIN CONTENT
+================================ */
+.main-content {
+  flex: 1;
+  padding: 36px;
+}
+
+/* ================================
+   HEADER
+================================ */
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 34px;
+}
+
+.title-input {
+  font-size: 28px;
+  font-weight: 700;
+  border: none;
+  background: transparent;
+  outline: none;
+  margin-bottom: 6px;
+}
+
+.subtitle-input {
+  width: 360px;
+  border: none;
+  background: transparent;
+  color: var(--text-muted);
+  resize: none;
+  outline: none;
+  font-size: 15px;
+}
+
+/* ================================
+   GRID LAYOUT
+================================ */
+.cards {
+  display: grid;
+  grid-template-columns: 2fr 1fr;
+  gap: 26px;
+  margin-bottom: 34px;
+}
+
+/* ================================
+   CARD
+================================ */
+.card {
+  background: var(--bg-card);
+  padding: 28px;
+  border-radius: 20px;
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.05);
+}
+
+.card h3 {
+  margin-bottom: 20px;
+  font-size: 18px;
+  font-weight: 600;
+}
+
+/* ================================
+   DEADLINES
+================================ */
+.editable-row {
+  display: grid;
+  grid-template-columns: 2fr 1fr;
+  gap: 14px;
+  margin-bottom: 14px;
+}
+
+.editable-row input {
+  padding: 10px 12px;
+  border-radius: 10px;
+  border: 1px solid var(--border);
+  outline: none;
+  font-size: 14px;
+}
+
+.editable-row input:focus {
+  border-color: var(--primary);
+}
+
+/* ================================
+   CALENDAR
+================================ */
+.calendar-grid {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 12px;
+  text-align: center;
+}
+
+.day-name {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--text-muted);
+}
+
+.day {
+  padding: 10px;
+  border-radius: 50%;
+}
+
+.active-day {
+  background: var(--primary);
+  color: white;
+  font-weight: 600;
+}
+
+/* ================================
+   TASKS
+================================ */
+.tasks {
+  max-width: 100%;
+}
+
+.task-row {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  margin-bottom: 14px;
+}
+
+.task-row input[type="text"] {
+  flex: 1;
+  padding: 10px 12px;
+  border-radius: 10px;
+  border: 1px solid var(--border);
+  outline: none;
+  font-size: 14px;
+}
+
+.task-row input[type="text"]:focus {
+  border-color: var(--primary);
+}
+
+.task-row input[type="checkbox"] {
+  transform: scale(1.1);
+}
+
+/* ================================
+   BUTTONS (GLOBAL)
+================================ */
+button {
+  margin-top: 12px;
+  padding: 10px 16px;
+  border: none;
+  border-radius: 12px;
+  background: var(--primary);
+  color: white;
+  font-weight: 500;
+  font-size: 14px;
+  cursor: pointer;
+  transition: background 0.2s ease;
+}
+
+button:hover {
+  background: var(--primary-dark);
+}
+
+button:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+/* ================================
+   RESPONSIVE
+================================ */
+@media (max-width: 900px) {
+  .cards {
+    grid-template-columns: 1fr;
+  }
+
+  .sidebar {
+    width: 200px;
+  }
+}

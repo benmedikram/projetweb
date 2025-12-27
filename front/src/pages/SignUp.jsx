@@ -46,7 +46,7 @@ export default function SignUp() {
       <form className="form" onSubmit={onSubmit}>
         <label>Full name</label>
         <div className="input icon-left">
-          <span className="icon" aria-hidden>👤</span>
+          <span className="icon">👤</span>
           <input
             type="text"
             name="name"
@@ -59,7 +59,7 @@ export default function SignUp() {
 
         <label>Email</label>
         <div className="input icon-left">
-          <span className="icon" aria-hidden>✉️</span>
+          <span className="icon">✉️</span>
           <input
             type="email"
             name="email"

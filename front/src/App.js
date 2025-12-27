@@ -5,22 +5,26 @@ import Dashboard from "./pages/Dashboard";
 import Tasks from "./pages/Tasks";
 import Courses from "./pages/Courses";
 import Projects from "./pages/Projects";
-import "./App.css";
 import SignIn from "./pages/SignIn.jsx";
+import SignUp from "./pages/SignUp.jsx";
+import "./App.css";
 
 const App = () => {
-  const location = useLocation(); // Get current route
+  const location = useLocation();
 
-  // Check if current route is SignIn
-  const isSignInPage = location.pathname === "/";
+  // Routes où la sidebar doit être cachée
+  const hideSidebarRoutes = ["/", "/signup"];
+  const hideSidebar = hideSidebarRoutes.includes(location.pathname);
 
   return (
     <div className="app-container">
-      {!isSignInPage && <Sidebar />} {/* Only show sidebar if not SignIn */}
+      {!hideSidebar && <Sidebar />}
+
       <div className="main-content">
         <Routes>
-          <Route path="/" element={<SignIn/>} />
-          <Route path="/dashbord" element={<Dashboard />} />
+          <Route path="/" element={<SignIn />} />
+          <Route path="/signup" element={<SignUp />} />
+          <Route path="/dashboard" element={<Dashboard />} />
           <Route path="/tasks" element={<Tasks />} />
           <Route path="/courses" element={<Courses />} />
           <Route path="/projects" element={<Projects />} />
@@ -31,5 +35,3 @@ const App = () => {
 };
 
 export default App;
-
-

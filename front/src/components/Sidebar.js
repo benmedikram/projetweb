@@ -7,7 +7,7 @@ const Sidebar = () => {
         <div className="sidebar">
             <h2>EduSpace</h2>
             <nav>
-                <NavLink to="/dashbord" className={({ isActive }) => isActive ? "active" : ""}>Dashboard</NavLink>
+                <NavLink to="/dashboard" className={({ isActive }) => isActive ? "active" : ""}>Dashboard</NavLink>
                 <NavLink to="/tasks" className={({ isActive }) => isActive ? "active" : ""}>Tasks</NavLink>
                 <NavLink to="/courses" className={({ isActive }) => isActive ? "active" : ""}>Courses</NavLink>
                 <NavLink to="/projects" className={({ isActive }) => isActive ? "active" : ""}>Projects</NavLink>

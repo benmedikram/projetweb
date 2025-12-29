@@ -1,75 +1,65 @@
 /* ================================
-   THEME GLOBAL (PARTAGÉ AVEC AUTH)
+   DASHBOARD STYLING
+   Uses variables from theme.css
 ================================ */
-:root {
-  --primary: #0EA5A4;
-  --primary-dark: #0C8F8E;
-  --primary-soft: #E6F7F7;
-
-  --bg-app: #F8FAFC;
-  --bg-card: #FFFFFF;
-
-  --border: #E5E7EB;
-
-  --text-main: #0F172A;
-  --text-muted: #64748B;
-}
-
-/* ================================
-   RESET & BASE
-================================ */
-* {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
-  font-family: "Segoe UI", sans-serif;
-}
 
 .dashboard-container {
   display: flex;
   min-height: 100vh;
-  background: var(--bg-app);
-  color: var(--text-main);
+  background: hsl(var(--bg-primary));
+  color: hsl(var(--text-primary));
+  transition: all 0.3s ease;
 }
 
 /* ================================
    SIDEBAR
 ================================ */
 .sidebar {
-  width: 240px;
-  background: linear-gradient(
-    180deg,
-    var(--primary),
-    var(--primary-dark)
-  );
-  color: white;
-  padding: 28px 22px;
+  width: 260px;
+  background: hsl(var(--bg-secondary));
+  /* Using secondary bg for sidebar in this design */
+  border-right: 1px solid hsl(var(--border-color));
+  color: hsl(var(--text-primary));
+  padding: 32px 24px;
   display: flex;
   flex-direction: column;
 }
 
 .logo {
-  font-size: 28px;
-  font-weight: 700;
-  margin-bottom: 45px;
+  font-size: 24px;
+  font-weight: 800;
+  margin-bottom: 48px;
+  color: hsl(var(--brand-primary));
+  display: flex;
+  align-items: center;
+  gap: 8px;
 }
 
 .menu {
   list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
 }
 
 .menu li {
-  padding: 14px 18px;
-  border-radius: 12px;
-  margin-bottom: 12px;
+  padding: 12px 16px;
+  border-radius: var(--btn-radius);
   cursor: pointer;
   font-weight: 500;
-  transition: background 0.2s ease;
+  transition: all 0.2s ease;
+  color: hsl(var(--text-secondary));
 }
 
-.menu li.active,
 .menu li:hover {
-  background: rgba(255, 255, 255, 0.25);
+  background: hsla(var(--brand-primary), 0.08);
+  color: hsl(var(--brand-primary));
+}
+
+.menu li.active {
+  background: hsl(var(--brand-primary));
+  color: white;
+  box-shadow: var(--shadow-sm);
 }
 
 /* ================================
@@ -77,7 +67,8 @@
 ================================ */
 .main-content {
   flex: 1;
-  padding: 36px;
+  padding: 40px;
+  overflow-y: auto;
 }
 
 /* ================================
@@ -87,26 +78,30 @@
   display: flex;
   justify-content: space-between;
   align-items: flex-start;
-  margin-bottom: 34px;
+  margin-bottom: 40px;
 }
 
 .title-input {
-  font-size: 28px;
+  font-size: 32px;
   font-weight: 700;
   border: none;
   background: transparent;
   outline: none;
-  margin-bottom: 6px;
+  margin-bottom: 8px;
+  color: hsl(var(--text-primary));
+  width: 100%;
 }
 
 .subtitle-input {
-  width: 360px;
+  width: 100%;
+  max-width: 500px;
   border: none;
   background: transparent;
-  color: var(--text-muted);
+  color: hsl(var(--text-secondary));
   resize: none;
   outline: none;
-  font-size: 15px;
+  font-size: 1.1rem;
+  font-family: inherit;
 }
 
 /* ================================
@@ -115,24 +110,31 @@
 .cards {
   display: grid;
   grid-template-columns: 2fr 1fr;
-  gap: 26px;
-  margin-bottom: 34px;
+  gap: 24px;
+  margin-bottom: 24px;
 }
 
 /* ================================
    CARD
 ================================ */
 .card {
-  background: var(--bg-card);
-  padding: 28px;
-  border-radius: 20px;
-  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.05);
+  background: hsl(var(--bg-secondary));
+  padding: 32px;
+  border-radius: var(--card-radius);
+  box-shadow: var(--shadow-sm);
+  border: 1px solid hsl(var(--border-color));
+  transition: box-shadow 0.2s ease;
+}
+
+.card:hover {
+  box-shadow: var(--shadow-md);
 }
 
 .card h3 {
-  margin-bottom: 20px;
-  font-size: 18px;
+  margin: 0 0 24px;
+  font-size: 1.2rem;
   font-weight: 600;
+  color: hsl(var(--text-primary));
 }
 
 /* ================================
@@ -141,20 +143,23 @@
 .editable-row {
   display: grid;
   grid-template-columns: 2fr 1fr;
-  gap: 14px;
-  margin-bottom: 14px;
+  gap: 16px;
+  margin-bottom: 16px;
 }
 
 .editable-row input {
-  padding: 10px 12px;
-  border-radius: 10px;
-  border: 1px solid var(--border);
+  padding: 10px 14px;
+  border-radius: 8px;
+  border: 1px solid hsl(var(--border-color));
+  background: hsl(var(--bg-primary));
+  color: hsl(var(--text-primary));
   outline: none;
-  font-size: 14px;
+  font-size: 0.95rem;
+  transition: border-color 0.2s;
 }
 
 .editable-row input:focus {
-  border-color: var(--primary);
+  border-color: hsl(var(--brand-primary));
 }
 
 /* ================================
@@ -163,25 +168,38 @@
 .calendar-grid {
   display: grid;
   grid-template-columns: repeat(7, 1fr);
-  gap: 12px;
+  gap: 8px;
   text-align: center;
 }
 
 .day-name {
-  font-size: 13px;
+  font-size: 0.85rem;
   font-weight: 600;
-  color: var(--text-muted);
+  color: hsl(var(--text-secondary));
+  margin-bottom: 8px;
 }
 
 .day {
-  padding: 10px;
+  aspect-ratio: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   border-radius: 50%;
+  font-size: 0.9rem;
+  color: hsl(var(--text-primary));
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.day:hover:not(.active-day) {
+  background: hsla(var(--text-primary), 0.05);
 }
 
 .active-day {
-  background: var(--primary);
+  background: hsl(var(--brand-primary));
   color: white;
   font-weight: 600;
+  box-shadow: 0 2px 8px hsla(var(--brand-primary), 0.4);
 }
 
 /* ================================
@@ -194,50 +212,56 @@
 .task-row {
   display: flex;
   align-items: center;
-  gap: 14px;
-  margin-bottom: 14px;
+  gap: 16px;
+  margin-bottom: 16px;
+  padding: 8px 0;
+  border-bottom: 1px solid hsl(var(--border-color));
+}
+
+.task-row:last-of-type {
+  border-bottom: none;
 }
 
 .task-row input[type="text"] {
   flex: 1;
-  padding: 10px 12px;
-  border-radius: 10px;
-  border: 1px solid var(--border);
+  padding: 8px 0;
+  border-radius: 0;
+  border: none;
+  background: transparent;
   outline: none;
-  font-size: 14px;
-}
-
-.task-row input[type="text"]:focus {
-  border-color: var(--primary);
+  font-size: 1rem;
+  color: hsl(var(--text-primary));
 }
 
 .task-row input[type="checkbox"] {
-  transform: scale(1.1);
+  width: 18px;
+  height: 18px;
+  accent-color: hsl(var(--brand-primary));
+  cursor: pointer;
 }
 
 /* ================================
-   BUTTONS (GLOBAL)
+   BUTTONS (GLOBAL in Dashboard)
 ================================ */
 button {
-  margin-top: 12px;
-  padding: 10px 16px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  margin-top: 16px;
+  padding: 10px 20px;
   border: none;
-  border-radius: 12px;
-  background: var(--primary);
+  border-radius: var(--btn-radius);
+  background: hsl(var(--brand-primary));
   color: white;
   font-weight: 500;
-  font-size: 14px;
+  font-size: 0.95rem;
   cursor: pointer;
-  transition: background 0.2s ease;
+  transition: all 0.2s ease;
 }
 
 button:hover {
-  background: var(--primary-dark);
-}
-
-button:disabled {
-  opacity: 0.6;
-  cursor: not-allowed;
+  background: hsl(var(--brand-hover));
+  transform: translateY(-1px);
 }
 
 /* ================================
@@ -249,6 +273,17 @@ button:disabled {
   }
 
   .sidebar {
-    width: 200px;
+    width: 80px;
+    /* Collapsed sidebar for mobile logic if implemented, or just hide/resize */
+    display: none;
+    /* Simple hide for now if not building mobile menu */
+  }
+
+  .dashboard-container {
+    flex-direction: column;
+  }
+
+  .main-content {
+    padding: 24px;
   }
 }

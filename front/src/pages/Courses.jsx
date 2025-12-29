@@ -1,5 +1,6 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import "./Courses.css";
+import { getCourses, createCourse, updateCourse, deleteCourse } from "../services/api";
 
 const Courses = () => {
   const [courses, setCourses] = useState([]);
@@ -12,19 +13,50 @@ const Courses = () => {
   const [currentPath, setCurrentPath] = useState([]);
   const [searchQuery, setSearchQuery] = useState("");
 
+  useEffect(() => {
+    loadCourses();
+  }, []);
+
+  const loadCourses = async () => {
+    try {
+      const data = await getCourses();
+      setCourses(data);
+    } catch (error) {
+      console.error("Error loading courses:", error);
+    }
+  };
+
   // Add a new course
-  const addCourse = () => {
-    if (newCourseName.trim()) {  // Check if name is not empty
-      const newCourse = {
-        id: Date.now(),
-        name: newCourseName,
-        folders: [],
-        documents: [],
-        createdAt: new Date().toLocaleDateString(),
-      };
-      setCourses([...courses, newCourse]);
-      setNewCourseName("");
-      setShowNewCourseModal(false);
+  const addCourse = async () => {
+    if (newCourseName.trim()) {
+      try {
+        const newCourse = {
+          name: newCourseName,
+          folders: [],
+          documents: []
+        };
+        const created = await createCourse(newCourse);
+        setCourses([...courses, created]);
+        setNewCourseName("");
+        setShowNewCourseModal(false);
+      } catch (error) {
+        console.error("Error creating course:", error);
+      }
+    }
+  };
+
+  // Helper to sync changes
+  const syncCourseUpdate = async (updatedCourse) => {
+    try {
+      await updateCourse(updatedCourse._id, {
+        folders: updatedCourse.folders,
+        documents: updatedCourse.documents
+      });
+      setCourses(courses.map(c => c._id === updatedCourse._id ? updatedCourse : c));
+      setSelectedCourse(updatedCourse);
+    } catch (error) {
+      console.error("Error syncing course:", error);
+      // Revert or alert? For PoC, just log.
     }
   };
 
@@ -32,99 +64,132 @@ const Courses = () => {
   const addFolder = () => {
     if (newFolderName.trim() && selectedCourse) {
       const newFolder = {
-        id: Date.now(),
+        id: Date.now().toString(), // Helper ID for nested structure
         name: newFolderName,
         folders: [],
         documents: [],
         createdAt: new Date().toLocaleDateString(),
       };
 
-      const updatedCourses = courses.map((course) => {
-        if (course.id === selectedCourse.id) {
-          if (currentPath.length === 0) {
-            return { ...course, folders: [...course.folders, newFolder] };
-          } else {
-            return addFolderRecursive(course, currentPath, newFolder);
-          }
-        }
-        return course;
-      });
-      
-      setCourses(updatedCourses);
-      
-      // Update selectedCourse to reflect the new state
-      const updatedCourse = updatedCourses.find(c => c.id === selectedCourse.id);
-      setSelectedCourse(updatedCourse);
+      let updatedCourse = { ...selectedCourse };
+      if (currentPath.length === 0) {
+        updatedCourse.folders = [...updatedCourse.folders, newFolder];
+      } else {
+        updatedCourse = addFolderRecursive(updatedCourse, currentPath, newFolder);
+      }
+
+      syncCourseUpdate(updatedCourse);
 
       setNewFolderName("");
       setShowNewFolderModal(false);
     }
   };
 
-  // Recursive function to add folder to nested structure
   const addFolderRecursive = (item, path, newFolder) => {
-    if (path.length === 0) return item;
+    if (path.length === 0) return { ...item, folders: [...item.folders, newFolder] }; // Should not strictly ideally happen if logic is correct
     if (path.length === 1 && path[0] === item.id) {
-      return { ...item, folders: [...item.folders, newFolder] };
+      return { ...item, folders: [...(item.folders || []), newFolder] };
     }
 
     const [first, ...rest] = path;
+    // Special handling for top level if item is the course itself (no id in path start usually if path is folder IDs)
+    // Actually currentPath is list of folder IDs.
+    // So if function called with Course, it needs to find folder 'first' in its folders.
+
+    // Correction: currentPath items are folder IDs.
+    // The recursive function logic in original code:
+    // path[0] === item.id check assumes item has that ID.
+    // If called on Course, Course has _id. Folders have 'id'.
+    // Let's stick to the original logic structure but adapt:
+
     return {
       ...item,
-      folders: item.folders.map((folder) =>
-        folder.id === first ? addFolderRecursive(folder, rest, newFolder) : folder
-      ),
+      folders: item.folders.map((folder) => {
+        // If this folder is the one we are looking for (first path item)
+        if (folder.id === first) {
+          if (path.length === 1) {
+            return { ...folder, folders: [...folder.folders, newFolder] };
+          } else {
+            return addFolderRecursive(folder, rest, newFolder);
+          }
+        }
+        return folder;
+      }),
     };
   };
 
+  // Since original recursion was a bit weird (path[0] === item.id?), let's rewrite it cleanly.
+  // path is [folderId1, folderId2].
+  // We want to go deep into folderId1 -> folderId2 -> output.
+  const updateCourseDeep = (course, path, updateFn) => {
+    // If path is empty, we update the course itself
+    if (path.length === 0) {
+      return updateFn(course);
+    }
+
+    // Otherwise we map folders
+    return {
+      ...course,
+      folders: course.folders.map(folder => {
+        if (folder.id === path[0]) {
+          // Found the folder in this level
+          if (path.length === 1) {
+            // This is the target folder
+            return updateFn(folder);
+          } else {
+            // Go deeper
+            return updateCourseDeep(folder, path.slice(1), updateFn);
+          }
+        }
+        return folder;
+      })
+    };
+  };
+
+
+  const addFolderRefined = () => {
+    if (newFolderName.trim() && selectedCourse) {
+      const newFolder = {
+        id: Date.now().toString(),
+        name: newFolderName,
+        folders: [],
+        documents: [],
+        createdAt: new Date().toLocaleDateString(),
+      };
+
+      const updatedCourse = updateCourseDeep(selectedCourse, currentPath, (item) => ({
+        ...item,
+        folders: [...(item.folders || []), newFolder]
+      }));
+
+      syncCourseUpdate(updatedCourse);
+      setNewFolderName("");
+      setShowNewFolderModal(false);
+    }
+  };
+
   // Upload document
-  const handleFileUpload = (event) => {
+  const handleFileUploadRefined = (event) => {
     const files = Array.from(event.target.files);
     if (files.length && selectedCourse) {
       const newDocuments = files.map((file) => ({
-        id: Date.now() + Math.random(),
+        id: Date.now().toString() + Math.random().toString(),
         name: file.name,
         size: (file.size / 1024).toFixed(2) + " KB",
         type: file.type || "unknown",
         uploadedAt: new Date().toLocaleDateString(),
       }));
 
-      const updatedCourses = courses.map((course) => {
-        if (course.id === selectedCourse.id) {
-          if (currentPath.length === 0) {
-            return { ...course, documents: [...course.documents, ...newDocuments] };
-          } else {
-            return addDocumentsRecursive(course, currentPath, newDocuments);
-          }
-        }
-        return course;
-      });
-      
-      setCourses(updatedCourses);
-      
-      // Update selectedCourse to reflect the new state
-      const updatedCourse = updatedCourses.find(c => c.id === selectedCourse.id);
-      setSelectedCourse(updatedCourse);
+      const updatedCourse = updateCourseDeep(selectedCourse, currentPath, (item) => ({
+        ...item,
+        documents: [...(item.documents || []), ...newDocuments]
+      }));
 
+      syncCourseUpdate(updatedCourse);
       setShowUploadModal(false);
     }
   };
 
-  // Recursive function to add documents to nested structure
-  const addDocumentsRecursive = (item, path, newDocuments) => {
-    if (path.length === 0) return item;
-    if (path.length === 1 && path[0] === item.id) {
-      return { ...item, documents: [...item.documents, ...newDocuments] };
-    }
-
-    const [first, ...rest] = path;
-    return {
-      ...item,
-      folders: item.folders.map((folder) =>
-        folder.id === first ? addDocumentsRecursive(folder, rest, newDocuments) : folder
-      ),
-    };
-  };
 
   // Navigate into a course
   const openCourse = (course) => {
@@ -152,6 +217,7 @@ const Courses = () => {
 
     let current = selectedCourse;
     for (const folderId of currentPath) {
+      if (!current.folders) return null;
       current = current.folders.find((f) => f.id === folderId);
       if (!current) return null;
     }
@@ -159,76 +225,37 @@ const Courses = () => {
   };
 
   // Delete course
-  const deleteCourse = (courseId) => {
+  const handleDeleteCourse = async (courseId) => {
     if (window.confirm("Are you sure you want to delete this course?")) {
-      setCourses(courses.filter((c) => c.id !== courseId));
+      try {
+        await deleteCourse(courseId);
+        setCourses(courses.filter((c) => c._id !== courseId));
+      } catch (error) {
+        console.error("Error deleting course:", error);
+      }
     }
   };
 
   // Delete folder
-  const deleteFolder = (folderId) => {
+  const handleDeleteFolder = (folderId) => {
     if (window.confirm("Are you sure you want to delete this folder?")) {
-      const updatedCourses = courses.map((course) => {
-        if (course.id === selectedCourse.id) {
-          return deleteFolderRecursive(course, currentPath, folderId);
-        }
-        return course;
-      });
-      
-      setCourses(updatedCourses);
-      
-      // Update selectedCourse to reflect the new state
-      const updatedCourse = updatedCourses.find(c => c.id === selectedCourse.id);
-      setSelectedCourse(updatedCourse);
+      const updatedCourse = updateCourseDeep(selectedCourse, currentPath, (item) => ({
+        ...item,
+        folders: item.folders.filter(f => f.id !== folderId)
+      }));
+      syncCourseUpdate(updatedCourse);
     }
-  };
-
-  // Recursive delete folder
-  const deleteFolderRecursive = (item, path, folderId) => {
-    if (path.length === 0) {
-      return { ...item, folders: item.folders.filter((f) => f.id !== folderId) };
-    }
-
-    const [first, ...rest] = path;
-    return {
-      ...item,
-      folders: item.folders.map((folder) =>
-        folder.id === first ? deleteFolderRecursive(folder, rest, folderId) : folder
-      ),
-    };
   };
 
   // Delete document
-  const deleteDocument = (docId) => {
+  const handleDeleteDocument = (docId) => {
     if (window.confirm("Are you sure you want to delete this document?")) {
-      const updatedCourses = courses.map((course) => {
-        if (course.id === selectedCourse.id) {
-          return deleteDocumentRecursive(course, currentPath, docId);
-        }
-        return course;
-      });
-      
-      setCourses(updatedCourses);
-      
-      // Update selectedCourse to reflect the new state
-      const updatedCourse = updatedCourses.find(c => c.id === selectedCourse.id);
-      setSelectedCourse(updatedCourse);
+      const updatedCourse = updateCourseDeep(selectedCourse, currentPath, (item) => ({
+        ...item,
+        documents: item.documents.filter(d => d.id !== docId)
+      }));
+      syncCourseUpdate(updatedCourse);
     }
-  };
-
-  // Recursive delete document
-  const deleteDocumentRecursive = (item, path, docId) => {
-    if (path.length === 0) {
-      return { ...item, documents: item.documents.filter((d) => d.id !== docId) };
-    }
-
-    const [first, ...rest] = path;
-    return {
-      ...item,
-      folders: item.folders.map((folder) =>
-        folder.id === first ? deleteDocumentRecursive(folder, rest, docId) : folder
-      ),
-    };
   };
 
   // Filter courses based on search
@@ -270,8 +297,8 @@ const Courses = () => {
             🏠 All Courses
           </button>
           <span className="separator">/</span>
-          <button 
-            className="breadcrumb-btn active" 
+          <button
+            className="breadcrumb-btn active"
             onClick={() => setCurrentPath([])}
           >
             {selectedCourse.name}
@@ -286,7 +313,7 @@ const Courses = () => {
                 return (
                   <React.Fragment key={folderId}>
                     <span className="separator">/</span>
-                    <button 
+                    <button
                       className="breadcrumb-btn active"
                       onClick={() => setCurrentPath(currentPath.slice(0, index + 1))}
                     >
@@ -316,14 +343,14 @@ const Courses = () => {
               </div>
             ) : (
               filteredCourses.map((course) => (
-                <div key={course.id} className="course-card" onClick={() => openCourse(course)}>
+                <div key={course._id} className="course-card" onClick={() => openCourse(course)}>
                   <div className="card-header">
                     <span className="course-icon">📖</span>
                     <button
                       className="btn-delete"
                       onClick={(e) => {
                         e.stopPropagation();
-                        deleteCourse(course.id);
+                        handleDeleteCourse(course._id);
                       }}
                     >
                       🗑️
@@ -331,8 +358,8 @@ const Courses = () => {
                   </div>
                   <h3>{course.name}</h3>
                   <div className="card-info">
-                    <span>📁 {course.folders.length} folders</span>
-                    <span>📄 {course.documents.length} files</span>
+                    <span>📁 {course.folders ? course.folders.length : 0} folders</span>
+                    <span>📄 {course.documents ? course.documents.length : 0} files</span>
                   </div>
                   <div className="card-date">Created: {course.createdAt}</div>
                 </div>
@@ -368,7 +395,7 @@ const Courses = () => {
 
             <div className="content-grid">
               {/* Folders */}
-              {currentContent?.folders.map((folder) => (
+              {currentContent?.folders && currentContent.folders.map((folder) => (
                 <div key={folder.id} className="item-card folder-card" onClick={() => openFolder(folder)}>
                   <div className="item-header">
                     <span className="item-icon">📁</span>
@@ -376,7 +403,7 @@ const Courses = () => {
                       className="btn-delete-small"
                       onClick={(e) => {
                         e.stopPropagation();
-                        deleteFolder(folder.id);
+                        handleDeleteFolder(folder.id);
                       }}
                     >
                       ✕
@@ -384,14 +411,14 @@ const Courses = () => {
                   </div>
                   <h4>{folder.name}</h4>
                   <div className="item-info">
-                    <span>{folder.folders.length} folders</span>
-                    <span>{folder.documents.length} files</span>
+                    <span>{folder.folders ? folder.folders.length : 0} folders</span>
+                    <span>{folder.documents ? folder.documents.length : 0} files</span>
                   </div>
                 </div>
               ))}
 
               {/* Documents */}
-              {currentContent?.documents.map((doc) => (
+              {currentContent?.documents && currentContent.documents.map((doc) => (
                 <div key={doc.id} className="item-card document-card">
                   <div className="item-header">
                     <span className="item-icon">{getFileIcon(doc.type)}</span>
@@ -399,7 +426,7 @@ const Courses = () => {
                       className="btn-delete-small"
                       onClick={(e) => {
                         e.stopPropagation();
-                        deleteDocument(doc.id);
+                        handleDeleteDocument(doc.id);
                       }}
                     >
                       ✕
@@ -413,7 +440,7 @@ const Courses = () => {
                 </div>
               ))}
 
-              {currentContent?.folders.length === 0 && currentContent?.documents.length === 0 && (
+              {(!currentContent?.folders || currentContent.folders.length === 0) && (!currentContent?.documents || currentContent.documents.length === 0) && (
                 <div className="empty-folder">
                   <span className="empty-icon">📭</span>
                   <p>This folder is empty</p>
@@ -460,14 +487,14 @@ const Courses = () => {
               placeholder="Folder name"
               value={newFolderName}
               onChange={(e) => setNewFolderName(e.target.value)}
-              onKeyPress={(e) => e.key === "Enter" && addFolder()}
+              onKeyPress={(e) => e.key === "Enter" && addFolderRefined()}
               autoFocus
             />
             <div className="modal-actions">
               <button className="btn-secondary" onClick={() => setShowNewFolderModal(false)}>
                 Cancel
               </button>
-              <button className="btn-primary" onClick={addFolder}>
+              <button className="btn-primary" onClick={addFolderRefined}>
                 Create
               </button>
             </div>
@@ -485,7 +512,7 @@ const Courses = () => {
                 type="file"
                 id="file-input"
                 multiple
-                onChange={handleFileUpload}
+                onChange={handleFileUploadRefined}
                 style={{ display: "none" }}
               />
               <label htmlFor="file-input" className="upload-label">

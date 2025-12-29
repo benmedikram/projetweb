@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { mockSignUp } from "../services/api";
+import { signUp } from "../services/api";
 import AuthLayout from "../components/AuthLayout";
 import "./auth.css";
 
@@ -25,8 +25,8 @@ export default function SignUp() {
     setErr("");
     setLoading(true);
     try {
-      const res = await mockSignUp(data);
-      localStorage.setItem("token", res.token);
+      const res = await signUp(data);
+      localStorage.setItem("token", res.access_token);
       localStorage.setItem("user", JSON.stringify(res.user));
       navigate("/dashboard");
     } catch (e2) {

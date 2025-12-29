@@ -1,7 +1,9 @@
 import React, { useState } from "react";
 import "./Dashboard.css";
+import { useTheme } from "../components/ThemeContext";
 
 const Dashboard = () => {
+  const { theme, toggleTheme } = useTheme();
   const [username, setUsername] = useState("chayma");
   const [message, setMessage] = useState("Here's your day at a glance!");
 
@@ -25,7 +27,7 @@ const Dashboard = () => {
 
   return (
     <div className="dashboard-container">
-      
+
 
       {/* Main */}
       <main className="main-content">
@@ -43,6 +45,9 @@ const Dashboard = () => {
               onChange={(e) => setMessage(e.target.value)}
             />
           </div>
+          <button onClick={toggleTheme} className="btn-ghost icon" title="Toggle Theme" style={{ fontSize: '1.5rem' }}>
+            {theme === 'dark' ? '☀️' : '🌙'}
+          </button>
         </div>
 
         {/* Cards */}
@@ -78,11 +83,11 @@ const Dashboard = () => {
           </div>
 
           {/* Calendar (simple placeholder modifiable plus tard) */}
-         {/* Calendar */}
+          {/* Calendar */}
           <div className="card calendar">
             <h3>April</h3>
             <div className="calendar-grid">
-              {["M","T","W","T","F","S","S"].map(day => (
+              {["M", "T", "W", "T", "F", "S", "S"].map(day => (
                 <span key={day} className="day-name">{day}</span>
               ))}
               {[...Array(30)].map((_, i) => (

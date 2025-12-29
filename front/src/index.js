@@ -5,12 +5,16 @@ import './index.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
 
+import { ThemeProvider } from './components/ThemeContext';
+
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   <React.StrictMode>
-    <BrowserRouter>        {/* ✅ on enveloppe l’app avec le router */}
-      <App />
-    </BrowserRouter>
+    <ThemeProvider>
+      <BrowserRouter>        {/* ✅ on enveloppe l’app avec le router */}
+        <App />
+      </BrowserRouter>
+    </ThemeProvider>
   </React.StrictMode>
 );
 

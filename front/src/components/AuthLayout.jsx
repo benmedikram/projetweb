@@ -1,5 +1,9 @@
+import { useTheme } from "./ThemeContext";
+
 // Un layout 2 colonnes pour SignIn/SignUp
 export default function AuthLayout({ title, subtitle, children }) {
+  const { theme, toggleTheme } = useTheme();
+
   return (
     <div className="auth-wrap">
       <div className="auth-grid">
@@ -13,9 +17,14 @@ export default function AuthLayout({ title, subtitle, children }) {
 
         {/* Carte formulaire */}
         <main className="auth-card glass fade-in">
-          <div className="auth-header">
-            <h2>{title}</h2>
-            {subtitle && <p>{subtitle}</p>}
+          <div className="auth-header-row" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1rem' }}>
+            <div className="auth-header-text">
+              <h2>{title}</h2>
+              {subtitle && <p>{subtitle}</p>}
+            </div>
+            <button onClick={toggleTheme} className="btn-ghost icon" title="Toggle Theme">
+              {theme === 'dark' ? '☀️' : '🌙'}
+            </button>
           </div>
           {children}
           <footer className="auth-footer">

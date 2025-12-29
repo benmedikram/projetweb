@@ -1,0 +1,63 @@
+/* theme.css */
+
+/* PREMIUM DESIGN SYSTEM - HSL COLORS */
+:root {
+  /* Light Mode Palette */
+  --bg-primary: 210, 20%, 98%;      /* Soft White/Grey */
+  --bg-secondary: 0, 0%, 100%;      /* Pure White */
+  --bg-accent: 210, 60%, 90%;       /* Light Blue Tint */
+  --text-primary: 220, 15%, 15%;    /* Deep Blue/Grey */
+  --text-secondary: 220, 10%, 45%;  /* Muted Grey */
+  --brand-primary: 245, 75%, 60%;   /* Vivid Purple/Blue */
+  --brand-hover: 245, 75%, 50%;
+  --brand-light: 245, 80%, 95%;     /* Subtle Brand Tint */
+  --border-color: 220, 20%, 90%;
+  --shadow-sm: 0 2px 8px hsla(220, 20%, 10%, 0.05);
+  --shadow-md: 0 8px 24px hsla(220, 20%, 10%, 0.08);
+  --card-radius: 16px;
+  --btn-radius: 12px;
+  --font-main: 'Inter', system-ui, -apple-system, sans-serif;
+  
+  /* Glassmorphism */
+  --glass-bg: hsla(0, 0%, 100%, 0.7);
+  --glass-border: hsla(0, 0%, 100%, 0.5);
+  --backdrop-blur: 16px;
+}
+
+[data-theme='dark'] {
+  /* Dark Mode Palette */
+  --bg-primary: 220, 15%, 10%;      /* Deep Dark Blue */
+  --bg-secondary: 220, 15%, 14%;    /* Slightly Lighter Panel */
+  --bg-accent: 220, 15%, 18%;       /* Hover State */
+  --text-primary: 220, 20%, 95%;    /* White/Grey */
+  --text-secondary: 220, 10%, 65%;  /* Muted Text */
+  --brand-primary: 245, 80%, 65%;   /* Lighter Purple for Dark Mode */
+  --brand-hover: 245, 80%, 75%;
+  --brand-light: 245, 30%, 25%;     /* Brand Tint for Dark Mode */
+  --border-color: 220, 15%, 22%;
+  --shadow-sm: 0 2px 8px hsla(0, 0%, 0%, 0.2);
+  --shadow-md: 0 8px 32px hsla(0, 0%, 0%, 0.4);
+
+  /* Glassmorphism Dark */
+  --glass-bg: hsla(220, 15%, 14%, 0.6);
+  --glass-border: hsla(220, 15%, 25%, 0.3);
+}
+
+/* Base Utilities using Variables */
+body {
+  background-color: hsl(var(--bg-primary));
+  color: hsl(var(--text-primary));
+  font-family: var(--font-main);
+  transition: background-color 0.3s ease, color 0.3s ease;
+  margin: 0;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* Typography map */
+h1, h2, h3, h4 { color: hsl(var(--text-primary)); font-weight: 700; letter-spacing: -0.02em; }
+p { color: hsl(var(--text-secondary)); line-height: 1.6; }
+
+/* Interactive Elements */
+button { transition: all 0.2s ease; font-family: var(--font-main); }
+a { color: hsl(var(--brand-primary)); text-decoration: none; transition: color 0.2s; }
+a:hover { color: hsl(var(--brand-hover)); }

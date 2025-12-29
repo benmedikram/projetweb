@@ -8,7 +8,7 @@ export class AuthService {
   constructor(
     private usersService: UserService,
     private jwtService: JwtService,
-  ) {}
+  ) { }
 
   // 🔹 Vérifier email + password
   async validateUser(email: string, pass: string) {
@@ -29,10 +29,20 @@ export class AuthService {
 
   // 🔹 Générer le token
   async login(user: any) {
-    const payload = { sub: user.id, email: user.email };
+    const payload = { sub: user.id || user._id, email: user.email };
 
     return {
       access_token: this.jwtService.sign(payload),
+      user: {
+        email: user.email,
+        name: user.name,
+      }
     };
+  }
+
+  // 🔹 Inscription
+  async signUp(createUserDto: any) {
+    const newUser = await this.usersService.create(createUserDto);
+    return this.login(newUser);
   }
 }

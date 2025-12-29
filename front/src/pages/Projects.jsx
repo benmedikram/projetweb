@@ -1,5 +1,6 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import "./Projects.css";
+import { getProjects, createProject, updateProject, deleteProject } from "../services/api";
 
 const Projects = () => {
   const [projects, setProjects] = useState([]);
@@ -10,18 +11,46 @@ const Projects = () => {
     deadline: "",
   });
 
-  const addProject = () => {
+  useEffect(() => {
+    loadProjects();
+  }, []);
+
+  const loadProjects = async () => {
+    try {
+      const data = await getProjects();
+      setProjects(data);
+    } catch (error) {
+      console.error("Error loading projects:", error);
+    }
+  };
+
+  const handleAddProject = async () => {
     if (!newProject.title || !newProject.deadline) return;
-    setProjects([...projects, { ...newProject, id: Date.now() }]);
-    setNewProject({ title: "", desc: "", status: "Not Started", deadline: "" });
+    try {
+      const created = await createProject(newProject);
+      setProjects([...projects, created]);
+      setNewProject({ title: "", desc: "", status: "Not Started", deadline: "" });
+    } catch (error) {
+      console.error("Error creating project:", error);
+    }
   };
 
-  const deleteProject = (id) => {
-    setProjects(projects.filter((p) => p.id !== id));
+  const handleDeleteProject = async (id) => {
+    try {
+      await deleteProject(id);
+      setProjects(projects.filter((p) => p._id !== id));
+    } catch (error) {
+      console.error("Error deleting project:", error);
+    }
   };
 
-  const changeStatus = (id, status) => {
-    setProjects(projects.map((p) => (p.id === id ? { ...p, status } : p)));
+  const handleChangeStatus = async (id, status) => {
+    try {
+      const updated = await updateProject(id, { status });
+      setProjects(projects.map((p) => (p._id === id ? updated : p)));
+    } catch (error) {
+      console.error("Error updating project:", error);
+    }
   };
 
   const statusColor = (status) => {
@@ -59,12 +88,12 @@ const Projects = () => {
           <option>In Progress</option>
           <option>Completed</option>
         </select>
-        <button onClick={addProject}>+ New Project</button>
+        <button onClick={handleAddProject}>+ New Project</button>
       </div>
 
       <div className="projects-list">
         {projects.map((project) => (
-          <div key={project.id} className="project-card">
+          <div key={project._id} className="project-card">
             <h3>{project.title}</h3>
             <p>{project.desc}</p>
             <p><strong>Deadline:</strong> {project.deadline}</p>
@@ -77,14 +106,14 @@ const Projects = () => {
             <div className="project-actions">
               <select
                 value={project.status}
-                onChange={(e) => changeStatus(project.id, e.target.value)}
+                onChange={(e) => handleChangeStatus(project._id, e.target.value)}
               >
                 <option>Not Started</option>
                 <option>In Progress</option>
                 <option>Completed</option>
               </select>
               {project.status === "Completed" && (
-                <button onClick={() => deleteProject(project.id)}>Delete</button>
+                <button onClick={() => handleDeleteProject(project._id)}>Delete</button>
               )}
             </div>
           </div>

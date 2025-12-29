@@ -1,37 +1,17 @@
 /* ================================
-   THEME GLOBAL (IDENTIQUE DASHBOARD)
+   AUTH PAGES STYLING
+   Uses variables from theme.css
 ================================ */
-:root {
-  --primary: #0EA5A4;
-  --primary-dark: #0C8F8E;
-  --primary-soft: #E6F7F7;
 
-  --bg-dark: #0F172A;
-  --bg-darker: #020617;
-
-  --glass-bg: rgba(255,255,255,0.08);
-  --glass-border: rgba(255,255,255,0.15);
-
-  --text-main: #E5E7EB;
-  --text-muted: #94A3B8;
-  --error-bg: #7F1D1D;
-  --error-text: #FECACA;
-}
-
-/* ================================
-   LAYOUT GLOBAL
-================================ */
 .auth-wrap {
   min-height: 100vh;
-  background: radial-gradient(
-    60% 80% at 10% 10%,
-    #0f766e 0%,
-    #042f2e 60%,
-    #020617 100%
-  );
+  background: radial-gradient(circle at 50% 10%,
+      hsl(var(--brand-light)) 0%,
+      hsl(var(--bg-primary)) 100%);
   display: grid;
   place-items: center;
   padding: 32px 16px;
+  transition: background 0.3s ease;
 }
 
 .auth-grid {
@@ -39,83 +19,82 @@
   max-width: 980px;
   display: grid;
   grid-template-columns: 1.1fr 0.9fr;
-  gap: 18px;
+  gap: 24px;
 }
 
 /* ================================
-   HERO VISUEL
+   HERO VISUAL
 ================================ */
 .auth-hero {
-  border-radius: 18px;
+  border-radius: var(--card-radius);
   background:
-    linear-gradient(
-      135deg,
-      rgba(14,165,164,.45),
-      rgba(6,182,212,.25)
-    ),
-    url("https://images.unsplash.com/photo-1498050108023-c5249f4df085?q=80&w=1200&auto=format&fit=crop")
-      center / cover no-repeat;
+    linear-gradient(135deg,
+      hsla(var(--brand-primary), 0.8),
+      hsla(var(--brand-hover), 0.6)),
+    url("https://images.unsplash.com/photo-1498050108023-c5249f4df085?q=80&w=1200&auto=format&fit=crop") center / cover no-repeat;
   position: relative;
   overflow: hidden;
   min-height: 520px;
-}
-
-.auth-hero::after {
-  content: "";
-  position: absolute;
-  inset: 0;
-  background: radial-gradient(
-    600px 200px at -10% -10%,
-    rgba(255,255,255,.18),
-    transparent
-  );
+  box-shadow: var(--shadow-md);
 }
 
 .auth-hero-content {
   position: absolute;
-  bottom: 24px;
-  left: 24px;
-  right: 24px;
-  color: var(--text-main);
-  text-shadow: 0 10px 30px rgba(0,0,0,.35);
+  bottom: 32px;
+  left: 32px;
+  right: 32px;
+  color: white;
+  /* Always white on top of hero image */
+  text-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
 }
 
 .auth-hero h1 {
-  font-size: 2.25rem;
-  margin: 0 0 6px;
+  color: white;
+  font-size: 2.5rem;
+  margin: 0 0 8px;
 }
 
 .auth-hero p {
-  opacity: .9;
-  color: var(--text-muted);
+  color: rgba(255, 255, 255, 0.9);
+  font-size: 1.1rem;
 }
 
 /* ================================
    GLASS CARD
 ================================ */
 .glass {
+  background: hsl(var(--bg-secondary));
+  /* Fallback */
   background: var(--glass-bg);
-  backdrop-filter: blur(12px);
+  backdrop-filter: blur(var(--backdrop-blur));
+  -webkit-backdrop-filter: blur(var(--backdrop-blur));
   border: 1px solid var(--glass-border);
 }
 
 .fade-in {
-  animation: fade .5s ease-out both;
+  animation: fade 0.6s cubic-bezier(0.22, 1, 0.36, 1) both;
 }
 
 @keyframes fade {
-  from { opacity: 0; transform: translateY(6px); }
-  to   { opacity: 1; transform: none; }
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+
+  to {
+    opacity: 1;
+    transform: none;
+  }
 }
 
 .auth-card {
-  color: var(--text-main);
-  border-radius: 18px;
-  padding: 26px;
+  color: hsl(var(--text-primary));
+  border-radius: var(--card-radius);
+  padding: 32px;
   display: flex;
   flex-direction: column;
-  gap: 18px;
-  box-shadow: 0 20px 60px rgba(0,0,0,.35);
+  gap: 24px;
+  box-shadow: var(--shadow-md);
 }
 
 /* ================================
@@ -123,12 +102,13 @@
 ================================ */
 .auth-header h2 {
   margin: 0;
-  font-size: 1.6rem;
+  font-size: 1.8rem;
+  color: hsl(var(--text-primary));
 }
 
 .auth-header p {
-  margin: 4px 0 0;
-  color: var(--text-muted);
+  margin: 6px 0 0;
+  color: hsl(var(--text-secondary));
 }
 
 /* ================================
@@ -136,12 +116,13 @@
 ================================ */
 .form {
   display: grid;
-  gap: 12px;
+  gap: 16px;
 }
 
 label {
-  color: #CBD5E1;
-  font-size: .92rem;
+  color: hsl(var(--text-primary));
+  font-weight: 500;
+  font-size: 0.95rem;
 }
 
 /* ================================
@@ -151,46 +132,54 @@ label {
   position: relative;
   display: flex;
   align-items: center;
-  background: rgba(2,6,23,.6);
-  border: 1px solid #134E4A;
-  border-radius: 12px;
-  padding: 6px 10px;
+  background: hsl(var(--bg-primary));
+  border: 1px solid hsl(var(--border-color));
+  border-radius: var(--btn-radius);
+  padding: 8px 12px;
+  transition: all 0.2s ease;
 }
 
 .input:focus-within {
-  border-color: var(--primary);
-  box-shadow: 0 0 0 3px rgba(14,165,164,.25);
+  border-color: hsl(var(--brand-primary));
+  box-shadow: 0 0 0 3px hsla(var(--brand-primary), 0.15);
 }
 
 .input input {
   outline: none;
   border: none;
   background: transparent;
-  color: var(--text-main);
+  color: hsl(var(--text-primary));
   width: 100%;
-  padding: 10px 6px;
-  font-size: 0.96rem;
+  padding: 8px 6px;
+  font-size: 1rem;
 }
 
 .icon {
-  opacity: .9;
+  opacity: 0.7;
   user-select: none;
+  color: hsl(var(--text-secondary));
 }
 
-.icon-left .icon { margin-right: 6px; }
-.icon-right .icon { margin-left: 6px; }
+.icon-left .icon {
+  margin-right: 8px;
+}
+
+.icon-right .icon {
+  margin-left: 8px;
+}
 
 .btn-ghost {
   background: transparent;
   border: none;
   cursor: pointer;
-  color: var(--text-muted);
-  padding: 4px 6px;
+  color: hsl(var(--text-secondary));
+  padding: 6px 8px;
   border-radius: 8px;
 }
 
 .btn-ghost:hover {
-  background: rgba(255,255,255,.08);
+  background: hsla(var(--text-primary), 0.05);
+  color: hsl(var(--text-primary));
 }
 
 /* ================================
@@ -204,36 +193,45 @@ label {
 }
 
 .check {
-  color: var(--text-muted);
-  font-size: .9rem;
+  color: hsl(var(--text-secondary));
+  font-size: 0.9rem;
+  display: flex;
+  align-items: center;
+  gap: 6px;
 }
 
 .link {
-  color: var(--primary);
+  color: hsl(var(--brand-primary));
+  font-weight: 500;
   text-decoration: none;
 }
 
 .link:hover {
   text-decoration: underline;
+  color: hsl(var(--brand-hover));
 }
 
 /* ================================
    MAIN BUTTON
 ================================ */
 .btn {
-  margin-top: 6px;
-  padding: 12px 14px;
+  margin-top: 12px;
+  padding: 14px;
   border: none;
-  border-radius: 12px;
-  font-weight: 700;
+  border-radius: var(--btn-radius);
+  font-weight: 600;
+  font-size: 1rem;
   cursor: pointer;
-  background: linear-gradient(
-    135deg,
-    var(--primary),
-    var(--primary-dark)
-  );
+  background: hsl(var(--brand-primary));
   color: white;
-  transition: transform .05s ease, filter .2s ease;
+  transition: transform 0.1s ease, background 0.2s ease, box-shadow 0.2s ease;
+  box-shadow: 0 4px 12px hsla(var(--brand-primary), 0.3);
+}
+
+.btn:hover {
+  background: hsl(var(--brand-hover));
+  transform: translateY(-1px);
+  box-shadow: 0 6px 16px hsla(var(--brand-primary), 0.4);
 }
 
 .btn:active {
@@ -241,20 +239,23 @@ label {
 }
 
 .btn:disabled {
-  opacity: .6;
+  opacity: 0.6;
   cursor: not-allowed;
-  filter: grayscale(.2);
+  transform: none;
+  box-shadow: none;
 }
 
 /* ================================
    ERROR
 ================================ */
 .auth-error {
-  background: var(--error-bg);
-  color: var(--error-text);
-  border: 1px solid #B91C1C;
-  padding: 10px 12px;
-  border-radius: 10px;
+  background: hsla(0, 80%, 60%, 0.1);
+  color: hsl(0, 80%, 60%);
+  border: 1px solid hsla(0, 80%, 60%, 0.2);
+  padding: 12px;
+  border-radius: var(--btn-radius);
+  font-size: 0.9rem;
+  text-align: center;
 }
 
 /* ================================
@@ -262,13 +263,16 @@ label {
 ================================ */
 .auth-alt {
   text-align: center;
-  color: var(--text-muted);
+  color: hsl(var(--text-secondary));
+  font-size: 0.95rem;
 }
 
 .auth-footer {
   text-align: center;
-  color: #64748B;
-  margin-top: 4px;
+  color: hsl(var(--text-secondary));
+  margin-top: auto;
+  font-size: 0.85rem;
+  opacity: 0.7;
 }
 
 /* ================================
@@ -277,14 +281,17 @@ label {
 @media (max-width: 920px) {
   .auth-grid {
     grid-template-columns: 1fr;
+    max-width: 500px;
   }
 
   .auth-hero {
-    order: 2;
-    min-height: 220px;
+    order: -1;
+    /* Hero on top */
+    min-height: 200px;
+    border-radius: var(--card-radius) var(--card-radius) 0 0;
   }
 
   .auth-card {
-    order: 1;
+    border-radius: 0 0 var(--card-radius) var(--card-radius);
   }
 }

@@ -1,0 +1,70 @@
+/* Full-page background */
+.logout-page {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    background: linear-gradient(135deg, #f0f4f8, #d9e2ec);
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+/* Card style */
+.logout-card {
+    background-color: white;
+    padding: 40px 50px;
+    border-radius: 15px;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+    text-align: center;
+    max-width: 400px;
+    width: 90%;
+}
+
+.logout-card h2 {
+    margin-bottom: 15px;
+    color: #333;
+}
+
+.logout-card p {
+    margin-bottom: 30px;
+    color: #555;
+    font-size: 16px;
+}
+
+/* Buttons container */
+.logout-buttons {
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+}
+
+/* Logout button */
+.logout-btn {
+    padding: 10px 25px;
+    background-color: #e63946;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    font-weight: bold;
+    transition: 0.3s;
+}
+
+.logout-btn:hover {
+    background-color: #d62839;
+}
+
+/* Cancel button */
+.cancel-btn {
+    padding: 10px 25px;
+    background-color: #adb5bd;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    font-weight: bold;
+    transition: 0.3s;
+}
+
+.cancel-btn:hover {
+    background-color: #868e96;
+}

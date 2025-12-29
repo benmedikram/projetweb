@@ -34,8 +34,10 @@ export class AuthService {
     return {
       access_token: this.jwtService.sign(payload),
       user: {
+        _id: user.id || user._id, // Ensure ID is sent
         email: user.email,
         name: user.name,
+        username: user.username,
       }
     };
   }

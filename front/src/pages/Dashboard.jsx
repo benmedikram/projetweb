@@ -1,11 +1,45 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import "./Dashboard.css";
 import { useTheme } from "../components/ThemeContext";
+import { updateProfile } from "../services/api";
 
 const Dashboard = () => {
   const { theme, toggleTheme } = useTheme();
-  const [username, setUsername] = useState("chayma");
+  const [user, setUser] = useState(null);
+  const [username, setUsername] = useState("");
   const [message, setMessage] = useState("Here's your day at a glance!");
+
+  useEffect(() => {
+    const storedUser = localStorage.getItem("user");
+    if (storedUser) {
+      const parsed = JSON.parse(storedUser);
+      setUser(parsed);
+      setUsername(parsed.username || parsed.name || "");
+    }
+  }, []);
+
+  const handleUpdateUsername = async (e) => {
+    const newUsername = e.target.value;
+    setUsername(newUsername);
+  };
+
+  const saveUsername = async () => {
+    if (user && username !== user.username) {
+      if (!user._id) {
+        alert("Session update required. Please logout and login again.");
+        return;
+      }
+      try {
+        const updated = await updateProfile(user._id, { username });
+        setUser(updated);
+        localStorage.setItem("user", JSON.stringify(updated));
+        alert("Username updated!");
+      } catch (err) {
+        console.error(err);
+        alert("Failed to update username");
+      }
+    }
+  };
 
   const [deadlines, setDeadlines] = useState([
     { title: "Math analysis", date: "Today" },
@@ -33,12 +67,17 @@ const Dashboard = () => {
       <main className="main-content">
         {/* Header editable */}
         <div className="header">
-          <div>
-            <input
-              className="title-input"
-              value={username}
-              onChange={(e) => setUsername(e.target.value)}
-            />
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+              <input
+                className="title-input"
+                value={username}
+                onChange={handleUpdateUsername}
+                onBlur={saveUsername} // Save on blur
+                placeholder="Username"
+              />
+              <span style={{ fontSize: '0.8rem', opacity: 0.7 }}></span>
+            </div>
             <textarea
               className="subtitle-input"
               value={message}
@@ -87,8 +126,8 @@ const Dashboard = () => {
           <div className="card calendar">
             <h3>April</h3>
             <div className="calendar-grid">
-              {["M", "T", "W", "T", "F", "S", "S"].map(day => (
-                <span key={day} className="day-name">{day}</span>
+              {["M", "T", "W", "T", "F", "S", "S"].map((day, i) => (
+                <span key={i} className="day-name">{day}</span>
               ))}
               {[...Array(30)].map((_, i) => (
                 <span

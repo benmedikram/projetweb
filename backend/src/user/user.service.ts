@@ -10,7 +10,7 @@ import * as bcrypt from 'bcryptjs';
 @Injectable()
 export class UserService {
   constructor(
-    @InjectModel('User') private userModel: Model<IUser>){}
+    @InjectModel('User') private userModel: Model<IUser>) { }
   async create(createUserDto: CreateUserDto): Promise<User> {
     const existing = await this.userModel.findOne({ email: createUserDto.email });
     if (existing) {
@@ -28,18 +28,18 @@ export class UserService {
   }
 
   findAll() {
-    return `This action returns all user`;
+    return this.userModel.find().exec(); // Return real users
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} user`;
+  async findOne(id: string): Promise<User | null> {
+    return this.userModel.findById(id).exec();
   }
 
-  update(id: number, updateUserDto: UpdateUserDto) {
-    return `This action updates a #${id} user`;
+  async update(id: string, updateUserDto: UpdateUserDto): Promise<User | null> {
+    return this.userModel.findByIdAndUpdate(id, updateUserDto, { new: true });
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} user`;
+  async remove(id: string): Promise<User | null> {
+    return this.userModel.findByIdAndDelete(id);
   }
 }

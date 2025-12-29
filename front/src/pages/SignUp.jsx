@@ -5,7 +5,7 @@ import AuthLayout from "../components/AuthLayout";
 import "./auth.css";
 
 export default function SignUp() {
-  const [data, setData] = useState({ name: "", email: "", password: "" });
+  const [data, setData] = useState({ name: "", username: "", email: "", password: "" });
   const [err, setErr] = useState("");
   const [showPwd, setShowPwd] = useState(false);
   const [loading, setLoading] = useState(false);
@@ -52,6 +52,19 @@ export default function SignUp() {
             name="name"
             placeholder="Jane Doe"
             value={data.name}
+            onChange={onChange}
+            required
+          />
+        </div>
+
+        <label>Username</label>
+        <div className="input icon-left">
+          <span className="icon">👤</span>
+          <input
+            type="text"
+            name="username"
+            placeholder="jdoe123"
+            value={data.username}
             onChange={onChange}
             required
           />

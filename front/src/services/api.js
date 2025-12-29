@@ -14,12 +14,21 @@ export async function signIn({ email, password }) {
   }
 }
 
-export async function signUp({ name, email, password }) {
+export async function signUp({ name, username, email, password }) {
   try {
-    const response = await api.post('/auth/signup', { name, email, password });
+    const response = await api.post('/auth/signup', { name, username, email, password });
     return response.data;
   } catch (error) {
     throw new Error(error.response?.data?.message || "Sign up failed");
+  }
+}
+
+export async function updateProfile(id, data) {
+  try {
+    const response = await api.patch(`/user/${id}`, data);
+    return response.data;
+  } catch (error) {
+    throw new Error(error.response?.data?.message || "Update profile failed");
   }
 }
 

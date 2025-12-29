@@ -1,0 +1,21 @@
+{
+  "name": "projetweb",
+  "version": "1.0.0",
+  "description": "Project web supcom",
+  "main": "index.js",
+  "scripts": {
+    "frontend": "cd front & npm run start",
+    "backend": "cd backend & npm run start:dev",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/benmedikram/projetweb.git"
+  },
+  "author": "ikram, chaime, ...",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/benmedikram/projetweb/issues"
+  },
+  "homepage": "https://github.com/benmedikram/projetweb#readme"
+}

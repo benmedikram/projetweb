@@ -1,109 +1,142 @@
 .tasks-container {
-    padding: 20px;
+    padding: 32px;
     min-height: 100vh;
-    background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+    background: hsl(var(--bg-primary));
+    color: hsl(var(--text-primary));
+    transition: background 0.3s ease, color 0.3s ease;
 }
 
 h1 {
     font-size: 28px;
     font-weight: bold;
-    color: #eee;
+    color: hsl(var(--text-primary));
+    margin-bottom: 8px;
 }
 
 p {
-    color: #ccc;
+    color: hsl(var(--text-secondary));
 }
 
 .add-task-box {
     display: flex;
     gap: 10px;
-    margin: 20px 0;
+    margin: 24px 0;
 }
 
 .add-task-box input {
-    padding: 10px;
-    border-radius: 8px;
-    border: 1px solid #ccc;
+    padding: 10px 14px;
+    border-radius: var(--btn-radius);
+    border: 1px solid hsl(var(--border-color));
+    background: hsl(var(--bg-secondary));
+    color: hsl(var(--text-primary));
+    outline: none;
+    transition: border-color 0.2s;
+}
+
+.add-task-box input:focus {
+    border-color: hsl(var(--brand-primary));
 }
 
 .btn-add {
-    background-color: #0652DD;
+    background-color: hsl(var(--brand-primary));
     color: white;
-    padding: 10px 16px;
-    border-radius: 8px;
+    padding: 10px 20px;
+    border-radius: var(--btn-radius);
     border: none;
     cursor: pointer;
-    font-weight: bold;
+    font-weight: 500;
+    transition: all 0.2s ease;
 }
 
 .btn-add:hover {
-    background-color: #1B9CFC;
+    background-color: hsl(var(--brand-hover));
+    transform: translateY(-1px);
 }
 
 /* TABLE */
 .task-table {
     width: 100%;
     border-collapse: collapse;
-    margin-top: 20px;
-    background: white;
-    border-radius: 12px;
+    margin-top: 24px;
+    background: hsl(var(--bg-secondary));
+    border-radius: var(--card-radius);
     overflow: hidden;
+    box-shadow: var(--shadow-sm);
+    border: 1px solid hsl(var(--border-color));
 }
 
 .task-table th,
 .task-table td {
-    padding: 15px;
-    border-bottom: 1px solid #eee;
+    padding: 16px;
+    border-bottom: 1px solid hsl(var(--border-color));
+    text-align: left;
+    color: hsl(var(--text-primary));
 }
 
 .task-table th {
-    background-color: #f2f2f2;
-    text-align: left;
+    background-color: hsla(var(--brand-primary), 0.05);
+    font-weight: 600;
+    color: hsl(var(--text-secondary));
+}
+
+.task-table tr:last-child td {
+    border-bottom: none;
 }
 
 .empty {
     text-align: center;
-    padding: 20px;
+    padding: 32px;
+    color: hsl(var(--text-secondary));
 }
 
 /* SELECT STATUT */
 .status-select {
-    padding: 6px 10px;
-    border-radius: 8px;
+    padding: 6px 12px;
+    border-radius: 6px;
     border: none;
     font-weight: 600;
     cursor: pointer;
+    background: hsl(var(--bg-primary));
+    color: hsl(var(--text-primary));
+    border: 1px solid hsl(var(--border-color));
 }
 
 /* Rouge : À faire */
 .status-select.À.faire {
-    background-color: #e63946;
-    color: white;
+    background-color: hsla(354, 70%, 54%, 0.1);
+    color: hsl(354, 70%, 54%);
+    border: 1px solid hsla(354, 70%, 54%, 0.2);
 }
 
 /* Jaune : En cours */
 .status-select.En.cours {
-    background-color: #f1c40f;
-    color: black;
+    background-color: hsla(45, 90%, 50%, 0.1);
+    color: hsl(45, 90%, 40%);
+    /* Darker yellow for visibility */
+    border: 1px solid hsla(45, 90%, 50%, 0.2);
 }
 
 /* Vert : Terminé */
 .status-select.Terminé {
-    background-color: #2ecc71;
-    color: white;
+    background-color: hsla(150, 60%, 45%, 0.1);
+    color: hsl(150, 60%, 45%);
+    border: 1px solid hsla(150, 60%, 45%, 0.2);
 }
 
 /* Bouton supprimer */
 .delete-btn {
-    background-color: #c0392b;
-    color: white;
+    background-color: transparent;
+    color: hsl(0, 84%, 60%);
     padding: 6px 12px;
-    border: none;
-    border-radius: 8px;
+    border: 1px solid hsl(0, 84%, 60%);
+    border-radius: 6px;
     cursor: pointer;
-    font-weight: bold;
+    font-weight: 500;
+    transition: all 0.2s;
+    font-size: 0.85rem;
 }
 
 .delete-btn:hover {
-    background-color: #e74c3c;
+    background-color: hsl(0, 84%, 60%);
+    color: white;
 }
